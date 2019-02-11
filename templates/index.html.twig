@@ -1,0 +1,472 @@
+{% set title = 'Course Reserves Registration' %}
+{% extends [settings.template.page, 'page.html.twig'] %}
+
+{% block content %}
+{{ parent() }}
+    <form method="post">
+        <fieldset>
+            <legend>Copyright</legend>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        {{
+                            helper.input({
+                                type: 'checkbox',
+                                name: 'copyright',
+                                value: copyright,
+                                attribs: {
+                                    id: 'copyright',
+                                    value: 1
+                                }
+                            })
+                            |raw
+                        }}
+                        <p><strong>By checking this box, I certify that this course reserves request complies with United States Copyright Law (U.S.C. 17).</strong></p>
+                        <p>For more information about copyright, see:</p>
+                        <ul>
+                            <li>
+                                <a href="http://www.arl.org/storage/documents/publications/code-of-best-practices-fair-use.pdf">
+                                    ARL’s Code of Best Practices in Fair Use for Academic and Research Libraries, pp. 13-15
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://www.ala.org/advocacy/copyright/fairuse/fairuseandelectronicreserves">
+                                    “Fair Use and Electronic Reserves” from the American Library Association
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://copyright.columbia.edu/copyright/fair-use/fair-use-checklist/">
+                                    “Fair Use Checklist” from the Columbia University Copyright Advisory Office
+                                </a>
+                            </li>
+                        </ul>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+        <div class="form-hidden">
+            <fieldset>
+                <legend>Courses</legend>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Instructor Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for instructor in instructors %}
+                        <tr>
+                            <td>
+                                {{
+                                    helper.input({
+                                        type: 'text',
+                                        name: 'instructors[' ~ loop.index0 ~ '][name]',
+                                        value: instructor.name,
+                                        attribs: {
+                                            class: 'form-control',
+                                            required: true
+                                        }
+                                    })
+                                    |raw
+                                }}
+                            </td>
+                            <td>
+                                {{
+                                    helper.input({
+                                        type: 'email',
+                                        name: 'instructors[' ~ loop.index0 ~ '][email]',
+                                        value: instructor.email,
+                                        attribs: {
+                                            class: 'form-control',
+                                            required: true
+                                        }
+                                    })
+                                    |raw
+                                }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2">
+                                <button class="btn btn-sm btn-add btn-default pull-left">Add</button>
+                                <button class="btn btn-sm btn-remove btn-danger pull-right">Remove</button>
+                                <span class="help-block">Please list all instructors and teaching assistants by adding a row for each.</span>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Course Number</th>
+                            <th>Title</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in courses %}
+                        <tr>
+                            <td>
+                                {{
+                                    helper.input({
+                                        type: 'text',
+                                        name: 'courses[' ~ loop.index0 ~ '][number]',
+                                        value: course.number,
+                                        attribs: {
+                                            class: 'form-control',
+                                            required: true
+                                        }
+                                    })
+                                    |raw
+                                }}
+                            </td>
+                            <td>
+                                {{
+                                    helper.input({
+                                        type: 'text',
+                                        name: 'courses[' ~ loop.index0 ~ '][title]',
+                                        value: course.title,
+                                        attribs: {
+                                            class: 'form-control',
+                                            required: true
+                                        }
+                                    })
+                                    |raw
+                                }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2">
+                                <button class="btn btn-sm btn-add btn-default pull-left">Add</button>
+                                <button class="btn btn-sm btn-remove btn-danger pull-right">Remove</button>
+                                <span class="help-block">Please list all courses by adding a row for each.</span>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </fieldset>
+            <fieldset>
+                <legend>Reserves</legend>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Item Title</th>
+                            <th>Author</th>
+                            <th>
+                                Call Number
+                                <div class="text-muted">For BGSU owned books only.</div>
+                            </th>
+                            <th>Loan Period</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reserve in reserves %}
+                        <tr>
+                            <td>
+                                {{
+                                    helper.input({
+                                        type: 'text',
+                                        name: 'reserves[' ~ loop.index0 ~ '][title]',
+                                        value: reserve.title,
+                                        attribs: {
+                                            class: 'form-control'
+                                        }
+                                    })
+                                    |raw
+                                }}
+                            </td>
+                            <td>
+                                {{
+                                    helper.input({
+                                        type: 'text',
+                                        name: 'reserves[' ~ loop.index0 ~ '][author]',
+                                        value: reserve.author,
+                                        attribs: {
+                                            class: 'form-control'
+                                        }
+                                    })
+                                    |raw
+                                }}
+                            </td>
+                            <td>
+                                {{
+                                    helper.input({
+                                        type: 'text',
+                                        name: 'reserves[' ~ loop.index0 ~ '][number]',
+                                        value: reserve.number,
+                                        attribs: {
+                                            class: 'form-control'
+                                        }
+                                    })
+                                    |raw
+                                }}
+                            </td>
+                            <td>
+                                {{
+                                    helper.input({
+                                        type: 'select',
+                                        name: 'reserves[' ~ loop.index0 ~ '][period]',
+                                        value: reserve.period,
+                                        attribs: {
+                                            class: 'form-control'
+                                        },
+                                        options: {
+                                            '2 hours': '2 hours',
+                                            '24 hours': '24 hours',
+                                            '3 days': '3 days',
+                                            '7 days (CRC only)': '7 days (CRC only)'
+                                        }
+                                    })
+                                    |raw
+                                }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <button class="btn btn-sm btn-add btn-default pull-left">Add</button>
+                                <button class="btn btn-sm btn-remove btn-danger pull-right">Remove</button>
+                                <span class="help-block">Please list all items by adding a row for each.</span>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="form-group">
+                    <label for="additional">Additional Information</label>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-5 col-lg-4">
+                            {{
+                                helper.input({
+                                    type: 'textarea',
+                                    name: 'additional',
+                                    value: additional,
+                                    attribs: {
+                                        class: 'form-control',
+                                        id: 'additional'
+                                    }
+                                })
+                                |raw
+                            }}
+                        </div>
+                        <div class="col-sm-6 col-md-7 col-lg-8">
+                            <span class="help-block">Complete reserve lists, special requests regarding length of time items should be on reserve, how you would like items to be returned, or any other information.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="location">Where should these items be placed on reserve?</label>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-5 col-lg-4">
+                            {{
+                                helper.input({
+                                    type: 'select',
+                                    name: 'location',
+                                    value: location,
+                                    attribs: {
+                                        class: 'form-control',
+                                        id: 'location'
+                                    },
+                                    options: locations
+                                })
+                                |raw
+                            }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="terms">Terms Needed</label>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-5 col-lg-4">
+                            <label class="checkbox-inline">
+                                {{
+                                    helper.input({
+                                        type: 'checkbox',
+                                        name: 'terms[]',
+                                        value: terms,
+                                        attribs: {
+                                            id: 'terms',
+                                            value: 'Fall'
+                                        }
+                                    })
+                                    |raw
+                                }}
+                                Fall
+                            </label>
+                            <label class="checkbox-inline">
+                                {{
+                                    helper.input({
+                                        type: 'checkbox',
+                                        name: 'terms[]',
+                                        value: terms,
+                                        attribs: {
+                                            value: 'Spring'
+                                        }
+                                    })
+                                    |raw
+                                }}
+                                Spring
+                            </label>
+                            <label class="checkbox-inline">
+                                {{
+                                    helper.input({
+                                        type: 'checkbox',
+                                        name: 'terms[]',
+                                        value: terms,
+                                        attribs: {
+                                            value: 'Summer'
+                                        }
+                                    })
+                                    |raw
+                                }}
+                                Summer
+                            </label>
+                        </div>
+                        <div class="col-sm-6 col-md-7 col-lg-8">
+                            <span class="help-block">Please select at least one term.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="date_begin">Begin Date</label>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-5 col-lg-4">
+                            {{
+                                helper.input({
+                                    type: 'date',
+                                    name: 'date_begin',
+                                    value: date_begin,
+                                    attribs: {
+                                        class: 'form-control',
+                                        id: 'date_begin'
+                                    }
+                                })
+                                |raw
+                            }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="date_end">End Date</label>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-5 col-lg-4">
+                            {{
+                                helper.input({
+                                    type: 'date',
+                                    name: 'date_end',
+                                    value: date_end,
+                                    attribs: {
+                                        class: 'form-control',
+                                        id: 'date_end'
+                                    }
+                                })
+                                |raw
+                            }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Confirmation Email</label>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-5 col-lg-4">
+                            {{
+                                helper.input({
+                                    type: 'email',
+                                    name: 'email',
+                                    value: email,
+                                    attribs: {
+                                        class: 'form-control',
+                                        id: 'email'
+                                    }
+                                })
+                                |raw
+                            }}
+                        </div>
+                        <div class="col-sm-6 col-md-7 col-lg-8">
+                            <span class="help-block">A confirmation email will only be sent if an email address is specified.</span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{
+                    helper.input({
+                        type: 'submit',
+                        name: false,
+                        attribs: {class: 'btn btn-primary'}
+                    })
+                    |raw
+                }}
+            </div>
+        </div>
+        {{ csrf_hidden|raw }}
+    </form>
+{% endblock %}
+
+{% block styles %}
+{{ parent() }}
+    <style>
+        th div { font-weight: normal }
+        .btn.pull-left { margin-right: 1em }
+        .btn.pull-right { margin-left: 1em }
+        .help-block { margin: 0 }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+    <script>
+        jQuery(function($) {
+            var copyright = $('#copyright').change(function() {
+                if (copyright.is(':checked')) {
+                    $('.form-hidden').slideDown();
+                } else {
+                    $('.form-hidden').slideUp();
+                }
+            });
+
+            if (!copyright.is(':checked')) {
+                $('.form-hidden').hide();
+            }
+
+            $('table').has('.btn-remove').each(function() {
+                var tbody = $('tbody', this),
+                    remove = $('.btn-remove', this);
+
+                if ($('tr', tbody).length == 1) {
+                    remove.css('visibility', 'hidden');
+                }
+
+                remove.click(function () {
+                    $('tr', tbody).last().remove();
+
+                    if ($('tr', tbody).length == 1) {
+                        remove.css('visibility', 'hidden');
+                    }
+
+                    return false;
+                });
+
+                $('.btn-add', this).click(function() {
+                    var tr = $('tr', tbody).html().replace(
+                        /(id|name)="([^"]*)\d+([^"]*)"/g,
+                        '$1="$2' + $('tr', tbody).length + '$3"'
+                    );
+
+                    tr = $('<tr>' + tr + '</tr>');
+                    $(':input', tr).val(null);
+
+                    tbody.append(tr);
+                    remove.css('visibility', 'visible');
+                    return false;
+                });
+            });
+        });
+    </script>
+{% endblock %}
