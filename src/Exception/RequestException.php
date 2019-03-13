@@ -2,9 +2,8 @@
 /**
  * Request Exception Class
  * @author John Kloor <kloor@bgsu.edu>
- * @copyright 2016 Bowling Green State University Libraries
+ * @copyright 2017 Bowling Green State University Libraries
  * @license MIT
- * @package Reserves
  */
 
 namespace App\Exception;
@@ -12,6 +11,8 @@ namespace App\Exception;
 /**
  * An exception for errors when submitting a request.
  */
-class RequestException extends \Exception
+class RequestException extends AbstractException
 {
+    public $title = 'Invalid Request';
+    public $message = 'Please check your request and try again.';
 }

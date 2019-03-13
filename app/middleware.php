@@ -2,10 +2,11 @@
 /**
  * Application Middleware
  * @author John Kloor <kloor@bgsu.edu>
- * @copyright 2016 Bowling Green State University Libraries
+ * @copyright 2017 Bowling Green State University Libraries
  * @license MIT
- * @package Reserves
  */
 
-// Add handler for CSRF protection.
-$app->add($container[\Slim\Csrf\Guard::class]);
+use Slim\Csrf\Guard;
+
+// Add middleware for CSRF protection.
+$app->add($container[Guard::class]);

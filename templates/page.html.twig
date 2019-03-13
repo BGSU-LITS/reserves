@@ -4,30 +4,39 @@
 {{
     helper.metas()
     .add({charset: 'utf-8'})
-    .addName('viewport', 'width=device-width,initial-scale=1,shrink-to-fit=no')
-    .addHttp('x-ua-Compatible', 'ie=edge')
+    .addName('viewport', 'width=device-width,initial-scale=1')
+    .addHttp('X-UA-Compatible', 'IE=edge')
     |raw
 }}
-{{ helper.title(title)|raw }}
-{% block styles %}
 {{
-    helper.styles()
-    .add('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
+    helper.title(title)
+    .append(title and settings.template.site ? ' - ' : '')
+    .append(settings.template.site)
     |raw
 }}
+{% block styles %}
+{% endblock %}
+{% block scripts %}
 {% endblock %}
 </head>
 <body>
+{% if settings.template.site or settings.template.menu %}
+<nav>
+<ul>
+{% if settings.template.site %}
+<li><strong><a href="{{ base_url }}">{{ settings.template.site }}</a></strong></li>
+{% endif %}
+{% for item in settings.template.menu %}
+<li><a href="{{ item.href }}">{{ item.text }}</a></li>
+{% endfor %}
+{% endif %}
 {% block content %}
-    <h1>{{ title }}</h1>
-{% endblock %}
-{% block scripts %}
-{{
-    helper.scripts()
-    .add('https://code.jquery.com/jquery-1.12.3.min.js')
-    .add('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
-    |raw
-}}
+{% if title %}
+<h1>{{ title }}</h1>
+{% endif %}
+{% for message in messages %}
+<div class="alert alert-{{message.level}}">{{message.message}}</div>
+{% endfor %}
 {% endblock %}
 </body>
 </html>

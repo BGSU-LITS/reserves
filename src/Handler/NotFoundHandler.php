@@ -2,9 +2,8 @@
 /**
  * Not Found Handler Class
  * @author John Kloor <kloor@bgsu.edu>
- * @copyright 2016 Bowling Green State University Libraries
+ * @copyright 2017 Bowling Green State University Libraries
  * @license MIT
- * @package Reserves
  */
 
 namespace App\Handler;

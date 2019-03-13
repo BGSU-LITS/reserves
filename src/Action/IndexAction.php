@@ -1,15 +1,14 @@
 <?php
 /**
- * Form Action Class
+ * Index Action Class
  * @author John Kloor <kloor@bgsu.edu>
- * @copyright 2016 Bowling Green State University Libraries
+ * @copyright 2017 Bowling Green State University Libraries
  * @license MIT
- * @package Reserves
  */
 
 namespace App\Action;
 
-use \App\Exception\RequestException;
+use App\Exception\RequestException;
 
 use Slim\Flash\Messages;
 use Slim\Views\Twig;
@@ -76,7 +75,15 @@ class IndexAction
     public function __invoke(Request $req, Response $res, array $args)
     {
         $args['messages'] = $this->messages();
-        $args['locations'] = $this->locations['title'];
+        $args['locations'] = [];
+
+        foreach ($this->locations as $key => $value) {
+            $args['locations'][$key] = $value['title'];
+        }
+
+        if (!empty($args['messages'])) {
+            $args['copyright'] = true;
+        }
 
         if ($req->getMethod() === 'POST') {
             $keys = [
@@ -103,9 +110,9 @@ class IndexAction
 
                 $this->flash->addMessage(
                     'success',
-                    'Your course reserves request has been sent.' .
-                    ' ' . $this->locations['instructions'][$args['location']] .
-                    ' You may send another request below.'
+                    'Your course reserves registration has been sent.' .
+                    ' ' . $this->locations[$args['location']]['instructions'] .
+                    ' You may send another registration below.'
                 );
 
                 return $res->withStatus(302)->withHeader(
@@ -114,7 +121,7 @@ class IndexAction
                 );
             } catch (RequestException $exception) {
                 $args['messages'][] = [
-                    'level' => 'danger',
+                    'level' => 'failure',
                     'message' => $exception->getMessage()
                 ];
             }
@@ -124,6 +131,8 @@ class IndexAction
             if (empty($args[$key])) {
                 $args[$key][] = false;
             }
+
+            $args[$key][] = false;
         }
 
         // Render form template.
@@ -134,7 +143,7 @@ class IndexAction
     {
         $result = [];
 
-        foreach (['success', 'danger'] as $level) {
+        foreach (['success', 'failure'] as $level) {
             $messages = $this->flash->getMessage($level);
 
             if (is_array($messages)) {
@@ -161,9 +170,9 @@ class IndexAction
         }
 
         $args['instructions'] =
-            $this->locations['instructions'][$args['location']];
+            $this->locations[$args['location']]['instructions'];
 
-        $messageFrom = $this->locations['email'][$args['location']];
+        $messageFrom = $this->locations[$args['location']]['email'];
         $messageTo[] = $messageFrom;
 
         if (!empty($args['email'])) {
@@ -172,7 +181,7 @@ class IndexAction
 
         try {
             $message = $this->mailer->createMessage()
-                ->setSubject('Course Reserves Request')
+                ->setSubject('Course Reserves Registration')
                 ->setFrom($messageFrom)
                 ->setTo($messageTo)
                 ->setBody(
@@ -218,7 +227,7 @@ class IndexAction
             $this->validateRow($key, $value, $args);
         }
 
-        if (empty($this->locations['email'][$args['location']])) {
+        if (empty($this->locations[$args['location']])) {
             throw new RequestException(
                 'You must specify a valid location.'
             );

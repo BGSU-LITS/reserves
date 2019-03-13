@@ -1,15 +1,15 @@
 <!doctype html>
 <html>
-    <body>
-        <h1 style="margin:0 0 10px 0">Course Reserves Request</h1>
-        <h2 style="margin:0 0 10px 0">Courses</h2>
-        <table border="0" cellspacing="0" cellpadding="0" style="margin:0 0 1em 0">
+    <body style="font-size:16px;line-height:1.5">
+        <h1 style="margin:0">Course Reserves Registration</h1>
+        <h2 style="margin:0">Courses</h2>
+        <table border="0" cellspacing="0" cellpadding="0" style="font-size:16px;line-height:1.5;margin:0 0 4em 0;width:100%">
             <thead>
                 <tr>
-                    <th style="padding:0 1em 0 0;text-align:left">
+                    <th style="padding:0 2em 0 0;text-align:left;width:50%">
                         Instructor Name
                     </th>
-                    <th style="padding:0 1em 0 0;text-align:left">
+                    <th style="padding:0 2em 0 0;text-align:left;width:50%">
                         Email
                     </th>
                 </tr>
@@ -17,23 +17,23 @@
             <tbody>
                 {% for instructor in instructors %}
                 <tr>
-                    <td style="padding:0 1em 0 0">
+                    <td style="padding:0 2em 1em 0">
                         {{ instructor.name }}
                     </td>
-                    <td style="padding:0 1em 0 0">
+                    <td style="padding:0 2em 1em 0">
                         {{ instructor.email }}
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <table border="0" cellspacing="0" cellpadding="0" style="margin:0 0 1em 0">
+        <table border="0" cellspacing="0" cellpadding="0" style="font-size:16px;line-height:1.5;margin:0 0 4em 0;width:100%">
             <thead>
                 <tr>
-                    <th style="padding:0 1em 0 0;text-align:left">
+                    <th style="padding:0 2em 0 0;text-align:left;width:50%">
                         Course Number
                     </th>
-                    <th style="padding:0 1em 0 0;text-align:left">
+                    <th style="padding:0 2em 0 0;text-align:left;width:50%">
                         Title
                     </th>
                 </tr>
@@ -41,10 +41,10 @@
             <tbody>
                 {% for course in courses %}
                 <tr>
-                    <td style="padding:0 1em 0 0">
+                    <td style="padding:0 2em 1em 0">
                         {{ course.number }}
                     </td>
-                    <td style="padding:0 1em 0 0">
+                    <td style="padding:0 2em 1em 0">
                         {{ course.title }}
                     </td>
                 </tr>
@@ -52,20 +52,20 @@
             </tbody>
         </table>
         {% if reserves %}
-        <h2 style="margin:0 0 10px 0">Reserves</h2>
-        <table border="0" cellspacing="0" cellpadding="0" style="margin:0 0 1em 0">
+        <h2 style="margin:0">Reserves</h2>
+        <table border="0" cellspacing="0" cellpadding="0" style="font-size:16px;line-height:1.5;margin:0 0 4em 0;width:100%">
             <thead>
                 <tr>
-                    <th style="padding:0 1em 0 0;text-align:left">
+                    <th style="padding:0 2em 0 0;text-align:left;width:25%">
                         Item Title
                     </th>
-                    <th style="padding:0 1em 0 0;text-align:left">
+                    <th style="padding:0 2em 0 0;text-align:left;width:25%">
                         Author
                     </th>
-                    <th style="padding:0 1em 0 0;text-align:left">
+                    <th style="padding:0 2em 0 0;text-align:left;width:25%">
                         Call Number
                     </th>
-                    <th style="padding:0 1em 0 0;text-align:left">
+                    <th style="padding:0 2em 0 0;text-align:left;width:25%">
                         Loan Period
                     </th>
                 </tr>
@@ -73,16 +73,16 @@
             <tbody>
                 {% for reserve in reserves %}
                 <tr>
-                    <td style="padding:0 1em 0 0">
+                    <td style="padding:0 2em 1em 0">
                         {{ reserve.title }}
                     </td>
-                    <td style="padding:0 1em 0 0">
+                    <td style="padding:0 2em 1em 0">
                         {{ reserve.author }}
                     </td>
-                    <td style="padding:0 1em 0 0">
+                    <td style="padding:0 2em 1em 0">
                         {{ reserve.number }}
                     </td>
-                    <td style="padding:0 1em 0 0">
+                    <td style="padding:0 2em 1em 0">
                         {{ reserve.period }}
                     </td>
                 </tr>
@@ -90,44 +90,34 @@
             </tbody>
         </table>
         {% endif %}
+        <p style="margin:0 0 0.5em 0">
         {% if additional %}
-        <p style="margin:0 0 1em 0">
-            <strong>Additional Information</strong><br>
-            {{ additional }}
-        </p>
+            <strong>Additional Information:</strong>
+            {{ additional }}<br>
         {% endif %}
         {% if location %}
-        <p style="margin:0 0 1em 0">
-            <strong>Where should these items be placed on reserve?</strong><br>
-            {{ locations[location] }}
-        </p>
+            <strong>Where should these items be placed on reserve?</strong>
+            {{ locations[location] }}<br>
         {% endif %}
         {% if terms %}
-        <p style="margin:0 0 1em 0">
-            <strong>Terms Needed</strong><br>
-            {{ terms|join(', ') }}
-        </p>
+            <strong>Terms Needed:</strong>
+            {{ terms|join(', ') }}<br>
         {% endif %}
         {% if date_begin %}
-        <p style="margin:0 0 1em 0">
-            <strong>Begin Date</strong><br>
-            {{ date_begin }}
-        </p>
+            <strong>Begin Date:</strong>
+            {{ date_begin }}<br>
         {% endif %}
         {% if date_end %}
-        <p style="margin:0 0 1em 0">
-            <strong>End Date</strong><br>
-            {{ date_end }}
-        </p>
+            <strong>End Date:</strong>
+            {{ date_end }}<br>
         {% endif %}
         {% if email %}
-        <p style="margin:0 0 1em 0">
-            <strong>Confirmation Email</strong><br>
+            <strong>Confirmation Email:</strong>
             {{ email }}
         </p>
-        <p style="border-top:1px solid black;padding:1em 0">
+        <p style="border-top:1px solid black;padding:0.5em 0">
             {{ instructions }}
-        </p>
         {% endif %}
+        </p>
     </body>
 </html>

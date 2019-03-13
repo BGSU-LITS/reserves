@@ -1,0 +1,30 @@
+# Application settings.
+app:
+  # Whether to enable debug information.
+  debug: false
+  # Path to log file, if any.
+  log:
+
+# Template settings.
+template:
+  # Path to search for templates before this package's templates.
+  path:
+  # Filename of template that defines a page. Default: page.html.twig
+  page:
+  # Name of the site for the template
+  site:
+  # Menu for the site in the template
+  menu:
+
+# SMTP settings.
+smtp:
+  # Server host.
+  host: smtp.example.edu
+  # Server port. Defaults to: 25
+  port: 25
+
+# Add title, email, and drop-off instructions for each library.
+locations:
+  - title: 1st Floor - Main Library
+    email: eres@example.edu
+    instructions: Please submit any items either via campus mail or by dropping them off at the main circulation desk.

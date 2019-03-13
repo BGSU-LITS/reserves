@@ -2,9 +2,8 @@
 /**
  * Method Not Allowed Handler Class
  * @author John Kloor <kloor@bgsu.edu>
- * @copyright 2016 Bowling Green State University Libraries
+ * @copyright 2017 Bowling Green State University Libraries
  * @license MIT
- * @package Reserves
  */
 
 namespace App\Handler;
@@ -42,7 +41,7 @@ class NotAllowedHandler extends \Slim\Handlers\NotAllowed
         return $this->view->fetch('error.html.twig', [
             'title' => 'Method Not Allowed',
             'message' =>
-                '<p>You must use one of these methods: '.
+                '<p>You must use one of these methods: ' .
                 implode(', ', $methods) . '</p>'
         ]);
     }

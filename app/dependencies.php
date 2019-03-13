@@ -2,12 +2,9 @@
 /**
  * Application Dependencies
  * @author John Kloor <kloor@bgsu.edu>
- * @copyright 2016 Bowling Green State University Libraries
+ * @copyright 2017 Bowling Green State University Libraries
  * @license MIT
- * @package Reserves
  */
-
-namespace App;
 
 use Slim\Container;
 use Slim\Csrf\Guard;
@@ -19,7 +16,7 @@ use Slim\Views\Twig;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-// Add Slim CSRF Guard to the container.
+// Add CSRF guard middleware to the container.
 $container[Guard::class] = function (Container $container) {
     $guard = new Guard;
 
@@ -34,18 +31,18 @@ $container[Guard::class] = function (Container $container) {
 // Add a PSR-3 compatible logger to the container.
 $container[LoggerInterface::class] = function (Container $container) {
     // Create new monolog logger.
-    $logger = new \Monolog\Logger('reserves');
+    $logger = new \Monolog\Logger('app');
 
     // If a log file was specified, add handler for that file to logger.
-    if ($container['settings']['log']) {
+    if ($container['settings']['app']['log']) {
         // Create stream handler for the specified log path.
         $handler = new \Monolog\Handler\StreamHandler(
-            $container['settings']['log']
+            $container['settings']['app']['log']
         );
 
         // Format the handler to only include stacktraces if in debug mode.
         $formatter = new \Monolog\Formatter\LineFormatter();
-        $formatter->includeStacktraces($container['settings']['debug']);
+        $formatter->includeStacktraces($container['settings']['app']['debug']);
         $handler->setFormatter($formatter);
 
         // Add web information to handler, and add handler to logger.
@@ -56,19 +53,19 @@ $container[LoggerInterface::class] = function (Container $container) {
     return $logger;
 };
 
-// Add Slim Flash Messages to the container.
+// Add flash messages to the container.
 $container[Messages::class] = function (Container $container) {
-    return new Messages;
+    return new Messages($_SESSION);
 };
 
 // Add Swift Mailer to the container.
 $container[Swift_Mailer::class] = function (Container $container) {
-    $transport = \Swift_SmtpTransport::newInstance(
+    $transport = new \Swift_SmtpTransport(
         $container['settings']['smtp']['host'],
         $container['settings']['smtp']['port']
     );
 
-    return Swift_Mailer::newInstance($transport);
+    return new Swift_Mailer($transport);
 };
 
 // Add a Twig template processor to the container.
@@ -83,8 +80,9 @@ $container[Twig::class] = function (Container $container) {
 
     // Define options for Twig.
     $options = [
+        'auto_reload' => true,
         'cache' => dirname(__DIR__) . '/cache',
-        'debug' => $container['settings']['debug']
+        'debug' => $container['settings']['app']['debug']
     ];
 
     // Create Twig view and make package settings available.
@@ -109,41 +107,10 @@ $container[Twig::class] = function (Container $container) {
     ]));
 
     // Add Slim extension to the view.
-    $basePath = $container['request']->getUri()->getBasePath();
-
     $view->addExtension(new \Slim\Views\TwigExtension(
         $container['router'],
-        rtrim(str_ireplace('index.php', '', $basePath), '/')
+        $container['request']->getUri()
     ));
 
     return $view;
-};
-
-// Add the index action to the container.
-$container[Action\IndexAction::class] = function (Container $container) {
-    return new Action\IndexAction(
-        $container[Messages::class],
-        $container[Twig::class],
-        $container[Swift_Mailer::class],
-        $container['settings']['locations']
-    );
-};
-
-// Add our application's error handler to container.
-$container['errorHandler'] = function (Container $container) {
-    return new Handler\ErrorHandler(
-        $container[LoggerInterface::class],
-        $container[Twig::class],
-        $container['settings']['debug']
-    );
-};
-
-// Add our application's not found handler to container.
-$container['notFoundHandler'] = function (Container $container) {
-    return new Handler\NotFoundHandler($container[Twig::class]);
-};
-
-// Add our application's method not allowed handler to container.
-$container['notAllowedHandler'] = function (Container $container) {
-    return new Handler\NotAllowedHandler($container[Twig::class]);
 };
