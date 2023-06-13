@@ -85,13 +85,14 @@ class IndexAction
             $args['copyright'] = true;
         }
 
+        $args['location'] = $req->getParam('location');
+
         if ($req->getMethod() === 'POST') {
             $keys = [
                 'copyright',
                 'instructors',
                 'courses',
                 'reserves',
-                'location',
                 'terms',
                 'date_begin',
                 'date_end',
