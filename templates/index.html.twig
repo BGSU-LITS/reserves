@@ -4,45 +4,7 @@
 {% block content %}
 {{ parent() }}
     <form method="post">
-        <fieldset>
-            <legend>Copyright</legend>
-            <p>
-                <label>
-                    {{
-                        helper.input({
-                            type: 'checkbox',
-                            name: 'copyright',
-                            value: copyright,
-                            attribs: {
-                                id: 'copyright',
-                                value: 1
-                            }
-                        })
-                        |raw
-                    }}
-                    <strong>By checking this box, I certify that this course reserves request complies with United States Copyright Law (U.S.C. 17).</strong>
-                </label>
-            </p>
-            <div>For more information about copyright, see:</div>
-            <ul>
-                <li>
-                    <a href="http://www.arl.org/storage/documents/publications/code-of-best-practices-fair-use.pdf">
-                        ARL’s Code of Best Practices in Fair Use for Academic and Research Libraries, pp. 13-15
-                    </a>
-                </li>
-                <li>
-                    <a href="http://www.ala.org/advocacy/copyright/fairuse/fairuseandelectronicreserves">
-                        “Fair Use and Electronic Reserves” from the American Library Association
-                    </a>
-                </li>
-                <li>
-                    <a href="http://copyright.columbia.edu/copyright/fair-use/fair-use-checklist/">
-                        “Fair Use Checklist” from the Columbia University Copyright Advisory Office
-                    </a>
-                </li>
-            </ul>
-        </fieldset>
-        <div id="hidden">
+        <div>
             <fieldset>
                 <legend>Courses</legend>
                 <table class="table">
@@ -291,6 +253,9 @@
                             |raw
                         }}
                     </div>
+                    <div class="question-help">
+                        Special Collections are still determining their reserve practices. Please reach out to them directly. Contact the Music Library at <a href="mailto:mlsra@bgsu.edu">mlsra@bgsu.edu</a> or Curriculum Resource Center at 419-372-7910 or email <a href="mailto:jbmulli@bgsu.edu">jbmulli@bgsu.edu</a>.
+                    </div>
                 </div>
                 <div class="question">
                     <label for="terms">Terms Needed</label>
@@ -499,17 +464,5 @@
 <script src="https://lib.bgsu.edu/template/1.0.0/addremove.js"></script>
 <script>
 bgsu_addremove.setup();
-
-(function() {
-    var copyright = document.getElementById('copyright');
-    var hidden = document.getElementById('hidden');
-
-    copyright.onchange = function() {
-        hidden.setAttribute('aria-expanded', this.checked ? 'true' : 'false');
-    };
-
-    copyright.onchange();
-    copyright.setAttribute('aria-controls', 'hidden');
-})();
 </script>
 {% endblock %}

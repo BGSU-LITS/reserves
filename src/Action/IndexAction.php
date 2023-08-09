@@ -81,15 +81,10 @@ class IndexAction
             $args['locations'][$key] = $value['title'];
         }
 
-        if (!empty($args['messages'])) {
-            $args['copyright'] = true;
-        }
-
         $args['location'] = $req->getParam('location');
 
         if ($req->getMethod() === 'POST') {
             $keys = [
-                'copyright',
                 'instructors',
                 'courses',
                 'reserves',
@@ -213,12 +208,6 @@ class IndexAction
 
     private function validateRequest(array $args)
     {
-        if (empty($args['copyright'])) {
-            throw new RequestException(
-                'You must review and complete the copyright section below.'
-            );
-        }
-
         $rows = [
             'instructors' => ['name', 'email'],
             'courses' => ['number', 'title']
