@@ -1,0 +1,179 @@
+{% extends 'page.html.twig' %}
+
+{% block scripts %}
+{{ parent() }}
+
+<script src="{{ bgsu_template_path }}addremove.js"></script>
+<script>bgsu_addremove.setup();</script>
+{% endblock %}
+
+{% block content %}
+{{ parent() }}
+
+<form method="post" class="bgsu_common_form">
+    <fieldset>
+        <legend><h2>Courses</h2></legend>
+        <table class="bgsu_common_table bgsu_common__full bgsu_common__middle">
+            <thead>
+                <tr>
+                    <th>Instructor Name</th>
+                    <th>Email</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-addremove>
+{% for instructor in post.instructors ?: [null] %}
+                <tr>
+                    <td><input type="text" name="instructors[{{ loop.index0 }}][name]" value="{{ instructor.name }}" title="Instructor {{ loop.index }} Name" class="bgsu_common__full" required></td>
+                    <td><input type="email" name="instructors[{{ loop.index0 }}][email]" value="{{ instructor.email }}" title="Instructor {{ loop.index }} Email" class="bgsu_common__full" required></td>
+                    <td class="bgsu_common__zero"><button data-addremove="remove" type="button" class="bgsu_common_button bgsu_common_button__small bgsu_common_button" disabled>Remove</button></td>
+                </tr>
+{% endfor %}
+                <tr>
+                    <td colspan="3">
+                        <button data-addremove="add" class="bgsu_common_button bgsu_common_button__small" disabled>Add</button>
+                        Please list all instructors and teaching assistants by adding a row for each.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="bgsu_common_table bgsu_common__full bgsu_common__middle">
+            <thead>
+                <tr>
+                    <th>Course Numnber</th>
+                    <th>Title</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-addremove>
+{% for course in post.courses ?: [null] %}
+                <tr>
+                    <td><input type="text" name="courses[{{ loop.index0 }}][number]" value="{{ course.number }}" title="Course {{ loop.index }} Number" class="bgsu_common__full" required></td>
+                    <td><input type="text" name="courses[{{ loop.index0 }}][title]" value="{{ course.title }}" title="Course {{ loop.index }} Title" class="bgsu_common__full" required></td>
+                    <td class="bgsu_common__zero"><button data-addremove="remove" type="button" class="bgsu_common_button bgsu_common_button__small bgsu_common_button" disabled>Remove</button></td>
+                </tr>
+{% endfor %}
+                <tr>
+                    <td colspan="3">
+                        <button data-addremove="add" class="bgsu_common_button bgsu_common_button__small" disabled>Add</button>
+                        Please list all courses by adding a row for each.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+
+    <fieldset>
+        <legend><h2>Reserves</h2></legend>
+        <ul>
+            <li>Items from other libraries cannot be placed on course reserve.</li>
+            <li>Personal items placed on reserve will have a permanent clear sticker placed on the cover and spine of book.</li>
+        </ul>
+        <table class="bgsu_common_table bgsu_common__full bgsu_common__middle">
+            <thead>
+                <tr>
+                    <th>Item Title</th>
+                    <th>Author</th>
+                    <th>
+                        Call Number
+                        <div class="bgsu_common__muted bgsu_common__small">For BGSU owned books only.</div>
+                    </th>
+{% if settings.form.periods %}
+                    <th>Loan Period</th>
+{% endif %}
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-addremove>
+{% for reserve in post.reserves ?: [null] %}
+                <tr>
+                    <td><input type="text" name="reserves[{{ loop.index0 }}][title]" value="{{ reserve.title }}" title="Reserve {{ loop.index }} Title" class="bgsu_common__full"></td>
+                    <td><input type="text" name="reserves[{{ loop.index0 }}][author]" value="{{ reserve.author }}" title="Reserve {{ loop.index }} Author" class="bgsu_common__full"></td>
+                    <td><input type="text" name="reserves[{{ loop.index0 }}][number]" value="{{ reserve.number }}" title="Reserve {{ loop.index }} Number" class="bgsu_common__full"></td>
+{% if settings.form.periods %}
+                    <td>
+                        <select name="reserves[{{ loop.index0 }}][period]" title="Reserve {{ loop.index }} Period" class="bgsu_common__full" required>
+{% for period in settings.form.periods %}
+                            <option{% if reserve.period == period %} selected{% endif %}>{{ period }}</option>
+{% endfor %}
+                        </select>
+                    </td>
+{% endif %}
+                    <td class="bgsu_common__zero"><button data-addremove="remove" type="button" class="bgsu_common_button bgsu_common_button__small bgsu_common_button" disabled>Remove</button></td>
+                </tr>
+{% endfor %}
+                <tr>
+                    <td colspan="5">
+                        <button data-addremove="add" class="bgsu_common_button bgsu_common_button__small" disabled>Add</button>
+                        Please list all items by adding a row for each.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="bgsu_common_form_group bgsu_common_form_group__question">
+            <strong><label for="additional">Additional Information</label></strong>
+            <div>
+                <div>
+                    <textarea name="additional" id="additional" rows="4">{{ post.additional }}</textarea>
+                </div>
+                <div>
+                    Complete reserve lists, special requests regarding length of time items should be on reserve, how you would like items to be returned, or any other information.
+                </div>
+            </div>
+        </div>
+        <div class="bgsu_common_form_group bgsu_common_form_group__question">
+            <strong><label for="location">Where should these items be placed on reserve?</label></strong>
+            <div>
+                <div>
+                    <select name="location" required>
+{% for location in settings.form.locations %}
+                        <option{% if post.location == location.title %} selected{% endif %}>{{ location.title }}</option>
+{% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="bgsu_common_form_group bgsu_common_form_group__question">
+            <strong>Terms Needed</strong>
+            <div>
+                <div class="bgsu_common__flex">
+{% for term in ['Fall', 'Spring', 'Summer'] %}
+                    <label>
+                        <input type="checkbox" name="terms[]" value="{{ term }}"{% if term in post.terms %} checked{% endif %}>
+                        {{ term }}
+                    </label>
+{% endfor %}
+                </div>
+                <div>Please select at least one term.</div>
+            </div>
+        </div>
+        <div class="bgsu_common_form_group bgsu_common_form_group__question">
+            <strong><label for="date_begin">Begin Date</label></strong>
+            <div>
+                <div>
+                    <input type="date" name="date_begin" id="date_begin" value="{{ post.date_begin }}">
+                </div>
+            </div>
+        </div>
+        <div class="bgsu_common_form_group bgsu_common_form_group__question">
+            <strong><label for="date_end">End Date</label></strong>
+            <div>
+                <div>
+                    <input type="date" name="date_end" id="date_end" value="{{ post.date_end }}">
+                </div>
+            </div>
+        </div>
+        <div class="bgsu_common_form_group bgsu_common_form_group__question">
+            <strong><label for="email">Confirmation Email</label></strong>
+            <div>
+                <div>
+                    <input type="text" name="email" id="email" value="{{ post.email }}">
+                </div>
+                <div>A confirmation email will only be sent if an email address is specified.</div>
+            </div>
+        </div>
+    </fieldset>
+    <p><button type="submit" class="bgsu_common_button bgsu_common_button__primary">Email Your Request</button></p>
+</form>
+
+{% endblock %}

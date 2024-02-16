@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+    <body style="font-size:16px;line-height:1.5">
+        <h1 style="margin:0">Course Reserves Registration</h1>
+        <h2 style="margin:0">Courses</h2>
+        <table border="0" cellspacing="0" cellpadding="0" style="font-size:16px;line-height:1.5;margin:0 0 4em 0;width:100%">
+            <thead>
+                <tr>
+                    <th style="padding:0 2em 0 0;text-align:left;width:50%">
+                        Instructor Name
+                    </th>
+                    <th style="padding:0 2em 0 0;text-align:left;width:50%">
+                        Email
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for instructor in post.instructors %}
+                <tr>
+                    <td style="padding:0 2em 1em 0">
+                        {{ instructor.name }}
+                    </td>
+                    <td style="padding:0 2em 1em 0">
+                        {{ instructor.email }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table border="0" cellspacing="0" cellpadding="0" style="font-size:16px;line-height:1.5;margin:0 0 4em 0;width:100%">
+            <thead>
+                <tr>
+                    <th style="padding:0 2em 0 0;text-align:left;width:50%">
+                        Course Number
+                    </th>
+                    <th style="padding:0 2em 0 0;text-align:left;width:50%">
+                        Title
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in post.courses %}
+                <tr>
+                    <td style="padding:0 2em 1em 0">
+                        {{ course.number }}
+                    </td>
+                    <td style="padding:0 2em 1em 0">
+                        {{ course.title }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if post.reserves %}
+        <h2 style="margin:0">Reserves</h2>
+        <table border="0" cellspacing="0" cellpadding="0" style="font-size:16px;line-height:1.5;margin:0 0 4em 0;width:100%">
+            <thead>
+                <tr>
+                    <th style="padding:0 2em 0 0;text-align:left;width:25%">
+                        Item Title
+                    </th>
+                    <th style="padding:0 2em 0 0;text-align:left;width:25%">
+                        Author
+                    </th>
+                    <th style="padding:0 2em 0 0;text-align:left;width:25%">
+                        Call Number
+                    </th>
+                    <th style="padding:0 2em 0 0;text-align:left;width:25%">
+                        Loan Period
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reserve in post.reserves %}
+                <tr>
+                    <td style="padding:0 2em 1em 0">
+                        {{ reserve.title }}
+                    </td>
+                    <td style="padding:0 2em 1em 0">
+                        {{ reserve.author }}
+                    </td>
+                    <td style="padding:0 2em 1em 0">
+                        {{ reserve.number }}
+                    </td>
+                    <td style="padding:0 2em 1em 0">
+                        {{ reserve.period }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        <p style="margin:0 0 0.5em 0">
+        {% if post.additional %}
+            <strong>Additional Information:</strong>
+            {{ post.additional }}<br>
+        {% endif %}
+        {% if post.location %}
+            <strong>Where should these items be placed on reserve?</strong>
+            {{ location.title }}<br>
+        {% endif %}
+        {% if post.terms %}
+            <strong>Terms Needed:</strong>
+            {{ post.terms|join(', ') }}<br>
+        {% endif %}
+        {% if post.date_begin %}
+            <strong>Begin Date:</strong>
+            {{ post.date_begin }}<br>
+        {% endif %}
+        {% if post.date_end %}
+            <strong>End Date:</strong>
+            {{ post.date_end }}<br>
+        {% endif %}
+        {% if post.email %}
+            <strong>Confirmation Email:</strong>
+            {{ post.email }}
+        </p>
+        <p style="border-top:1px solid black;padding:0.5em 0">
+            {{ location.instructions }}
+        {% endif %}
+        </p>
+    </body>
+</html>
